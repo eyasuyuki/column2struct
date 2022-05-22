@@ -14,6 +14,11 @@ go get github.com/eyasuyuki/column2struct
 ```shell
 go run github.com/eyasuyuki/column2struct <DSN> [<filename>]
 ```
+DSN 
+: data set name
+
+filename
+: output file name
 
 ## Example
 
