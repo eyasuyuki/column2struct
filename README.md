@@ -20,3 +20,9 @@ go run github.com/eyasuyuki/column2struct <DSN> [<filename>]
 ```
 go run github.com/eyasuyuki/column2struct 'user:password@tcp(127.0.0.1:3306)/dbname?charset=utf8&parseTime=True&loc=UTC'  ./database/database.go 
 ```
+
+## Environment variable
+
+|environment variable|default|description|
+---|---|---
+|PACKAGE_NAME|```"database"```|generated code's package name|

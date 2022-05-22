@@ -53,6 +53,8 @@ func ({{StructName}}) TableName() string {
 {{/Tables}}
 `
 
+PACKAGE_NAME_KEY = "PACKAGE_NAME"
+DEFAULT_PACKAGE_NAME = "database"
 )
 
 var DATA_MAP = map[string]string{
@@ -168,8 +170,14 @@ func main() {
 		log.Fatalf(err.Error())
 	}
 
+	// get package name
+	packageName := os.Getenv(PACKAGE_NAME_KEY)
+	if packageName == "" {
+		packageName = DEFAULT_PACKAGE_NAME
+	}
+
 	// set tables
-	tables := &Tables{PackageName: "database"}
+	tables := &Tables{PackageName: packageName}
 	var table *Table
 	var prevTableName string
 	for _, column := range columns {
