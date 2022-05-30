@@ -18,6 +18,7 @@ SELECT
   column_name,
   data_type,
   is_nullable,
+  column_type,
   column_key
 FROM
   information_schema.columns
@@ -86,6 +87,7 @@ type Column struct {
 	ColumnName string
 	DataType   string
 	IsNullable string
+	ColumnType string
 	ColumnKey  string
 }
 
@@ -117,10 +119,14 @@ func (c Column) Tags() string {
 }
 
 func (c Column) GoType() string {
+	result := DATA_MAP[c.DataType]
+	if c.ColumnType == "tinyint(1)" {
+		result = "bool"
+	}
 	if c.isNullable() {
-		return "*" + DATA_MAP[c.DataType]
+		return "*" + result
 	} else {
-		return DATA_MAP[c.DataType]
+		return result
 	}
 }
 
