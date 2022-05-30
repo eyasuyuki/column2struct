@@ -56,7 +56,7 @@ func ({{StructName}}) TableName() string {
 	return "{{TableName}}"
 }
 
-func ({{StructName}}) IdFromBase64(id string) (int64, error) {
+func Base64To{{StructName}}Id(id string) (int64, error) {
 	out, err := base64.StdEncoding.DecodeString(id)
 	if err != nil {
 		panic(any(err))
@@ -65,8 +65,8 @@ func ({{StructName}}) IdFromBase64(id string) (int64, error) {
 	return strconv.ParseInt(string(strId), 10, 64)
 }
 
-func (m {{StructName}}) Base64Id() string {
-	strId := "{{StructName}}:"+strconv.FormatInt(m.Id, 10)
+func {{StructName}}IdToBase64(id int64) string {
+	strId := "{{StructName}}:"+strconv.FormatInt(id, 10)
 	return base64.StdEncoding.EncodeToString([]byte(strId))
 }
 
