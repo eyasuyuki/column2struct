@@ -33,9 +33,15 @@ ORDER BY
 
 package {{PackageName}}
 
+import (
+	"encoding/base64"
+	"strconv"
 {{#UseTime}}
-import "time"
+	"time"
 {{/UseTime}}
+)
+
+const TIMESTAMP_PATTERN = "2006-01-02 15:04:05.999999999"
 	
 {{#Tables}}
 // {{StructName}}
@@ -48,6 +54,20 @@ type {{StructName}} struct {
 
 func ({{StructName}}) TableName() string {
 	return "{{TableName}}"
+}
+
+func ({{StructName}}) IdFromBase64(id string) (int64, error) {
+	out, err := base64.StdEncoding.DecodeString(id)
+	if err != nil {
+		panic(any(err))
+	}
+	strId := out[len("{{StructName}}:"):len(out)]
+	return strconv.ParseInt(string(strId), 10, 64)
+}
+
+func (m {{StructName}}) Base64Id() string {
+	strId := "{{StructName}}:"+strconv.FormatInt(m.Id, 10)
+	return base64.StdEncoding.EncodeToString([]byte(strId))
 }
 
 {{/Tables}}
@@ -180,6 +200,9 @@ func main() {
 	var table *Table
 	var prevTableName string
 	for _, column := range columns {
+		if column.TableName == "flyway_schema_history" {
+			continue
+		}
 		if column.TableName != prevTableName {
 			if table != nil {
 				tables.Tables = append(tables.Tables, *table)
